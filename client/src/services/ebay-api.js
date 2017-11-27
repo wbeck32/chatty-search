@@ -1,5 +1,5 @@
 'use strict';
-require('dotenv').config({path: '../../../'})
+require('dotenv')
 const req = require('superagent');
 const querystring = require('querystring');
 
