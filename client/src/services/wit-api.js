@@ -6,6 +6,5 @@ export const submitMessage = async message => {
   const val = Object.values(msgResult.body)[0];
   const { value } = val[0];
   const messageToAdd = { entity: entity[0], value: value };
-  console.log(messageToAdd);
   return messageToAdd;
 };

@@ -1,16 +1,15 @@
-'use strict';
 require('dotenv')
-const req = require('superagent');
-const querystring = require('querystring');
+const superagent = require('superagent');
 
 export const checkKeywords = async data => {
   console.log(5, data);
-  const refinedKeywords = await superagent.get('/refineKeywords').query(query);
+  const refinedKeywords = await superagent.get('/ebay/refineKeywords').query({data});
   return refinedKeywords;
 };
 
 export const callFindingAPI = async keywords => {
-  console.log(7, keywords.text);
-  const searchResults = await superagent.get('/findItem').query(query2);
-  return searchResults;
+  console.log(7, keywords);
+  const searchResults = await superagent.get('/ebay/findItem').query({keywords});
+  console.log(345,searchResults.body[0].item)
+  return searchResults.body[0].item;
 };
