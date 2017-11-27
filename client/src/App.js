@@ -6,11 +6,16 @@ import ChatbotSend from '../src/components/ChatbotSend';
 import DisplayResults from '../src/components/DisplayResults';
 
 class App extends Component {
-
+  constructor(props) {
+    super(props);
+    this.state = {
+      messages: []
+    };
+  }
   render() {
     return (
       <div className="App">
-        <ChatbotMessages />
+        <ChatbotMessages props={this.props}/>
         <ChatbotSend sendMessage={q => sendMessage(q)} />
         <DisplayResults />
       </div>

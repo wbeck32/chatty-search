@@ -1,12 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 ChatbotSend.PropTypes = {
   sendMessage: PropTypes.func
 };
 
 export default function ChatbotSend({ sendMessage }) {
   return (
+<div>
+
+
     <div>
       <form
         className=""
@@ -22,6 +24,7 @@ export default function ChatbotSend({ sendMessage }) {
         </button>
         <input type="text" className="" name="query" placeholder="speak" />
       </form>
+    </div>
     </div>
   );
 }
