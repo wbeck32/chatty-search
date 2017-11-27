@@ -1,26 +1,21 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
+import Message from './Message';
 
-// ChatbotMessages.PropTypes = {
-//   // sendMessage: PropTypes.func
-// };
-
-export default function ChatbotMessages() {
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {
-  //     messages: []
-  //   };
-  // }
-
-  // render() {
+ChatbotMessages.PropTypes = {
+  messages: PropTypes.array
+};
+const messages = ['1', '2']
+export default function ChatbotMessages( {messages} ) {
+  console.log(20, messages, typeof messages)
   return (
-    <div>
-      {' '}
-      <Conversation />
-    </div>
+    <div></div>
+    // <ul>
+    //   {messages.map((message, i) => (
+    //     <li key={i}>
+    //       <Message message={message} />
+    //     </li>
+    //   ))}
+    // </ul>
   );
 }
-// }
-
-// export default ChatbotMessages

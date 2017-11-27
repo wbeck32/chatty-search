@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
 ChatbotSend.PropTypes = {
-  sendMessage: PropTypes.func
+  sendMessage: PropTypes.func,
+  messages: PropTypes.array
 };
 
-export default function ChatbotSend({ sendMessage }) {
+export default function ChatbotSend({ sendMessage, messages }) {
   return (
 <div>
-
-
     <div>
       <form
         className=""
