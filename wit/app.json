@@ -1,0 +1,9 @@
+{
+            "version" : 20160513,
+            "zip-command" : "zip chatty-search.zip chatty-search/app.json chatty-search/entities/*.json chatty-search/actions.json chatty-search/stories.json chatty-search/expressions.json",
+            "data" : {
+              "name" : "chatty-search",
+              "description" : "",
+              "lang" : "en"
+            }
+          }
