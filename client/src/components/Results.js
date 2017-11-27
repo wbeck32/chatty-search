@@ -27,6 +27,8 @@ export function Result({ result }) {
   return (
     <div>
       <div>{result.title}</div>
+      <div>{result.location}</div>
+
     </div>
   );
 }

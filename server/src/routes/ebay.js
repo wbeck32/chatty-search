@@ -1,13 +1,12 @@
-require('dotenv').config({path: '../../../'})
+require('dotenv')
 const express = require('express');
 const router = express.Router();
-const jsonParser = require('body-parser').json();
 const superagent = require('superagent');
 const querystring = require('querystring');
 const { asyncIt } = require('./middleware');
 
 router.get(
-  '/refineKeywords', jsonParser,
+  '/refineKeywords',
   asyncIt(async (req, res, next) => {
     console.log(22, req.query);
     const refine = querystring.stringify({
@@ -28,7 +27,7 @@ router.get(
   })
 ),
   router.get(
-    '/findItem', jsonParser,
+    '/findItem',
     asyncIt(async (req, res, next) => {
       const {keywords} = req.query;
       console.log(7878, keywords)
@@ -36,7 +35,7 @@ router.get(
         'OPERATION-NAME': 'findItemsByKeywords',
         'SERVICE-VERSION': '1.0.0',
         'RESPONSE-DATA-FORMAT': 'JSON',
-        keywords: keywords,
+        'keywords': keywords,
         'SECURITY-APPNAME': process.env.REACT_APP_SECURITY_APPNAME,
         'GLOBAL-ID': 'EBAY-US'
       });
