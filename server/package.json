@@ -13,10 +13,14 @@
     "express": "^4.16.2",
     "https": "^1.0.0",
     "isomorphic-fetch": "^2.2.1",
+    "jsonp": "^0.2.1",
     "mocha-better-spec-reporter": "^3.1.0",
     "morgan": "^1.9.0",
+    "node-jsonp": "^1.0.2",
+    "node-wit": "^4.3.0",
     "nodemon": "^1.12.1",
     "superagent": "^3.8.1",
+    "superagent-jsonp": "^0.1.2",
     "uuid": "^3.0.0"
   },
   "devDependencies": {

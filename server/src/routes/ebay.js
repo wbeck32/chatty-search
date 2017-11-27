@@ -15,7 +15,7 @@ router.get(
       'SERVICE-VERSION': '1.0.0',
       'RESPONSE-DATA-FORMAT': 'JSON',
       keywords: data,
-      'SECURITY-APPNAME': process.env.SECURITY_APPNAME,
+      'SECURITY-APPNAME': process.env.REACT_APP_SECURITY_APPNAME,
       'GLOBAL-ID': 'EBAY-US'
     });
     const refinedKeywords = await superagent
@@ -33,7 +33,7 @@ router.get(
         'SERVICE-VERSION': '1.0.0',
         'RESPONSE-DATA-FORMAT': 'JSON',
         keywords: 'bicycle',
-        'SECURITY-APPNAME': process.env.SECURITY_APPNAME,
+        'SECURITY-APPNAME': process.env.REACT_APP_SECURITY_APPNAME,
         'GLOBAL-ID': 'EBAY-US'
       });
       const searchResults = await superagent
