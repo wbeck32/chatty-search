@@ -1,8 +1,11 @@
 const superagent = require('superagent');
 
-export const sendMessage = async message => {
-  console.log(5, message);
+export const submitMessage = async message => {
   const msgResult = await superagent.get('/wit/message').query(message);
-  msgResult.body.search_term ? console.log('search', msgResult.body.search_term[0].value) : console.log('not');
-  return msgResult;
+  const entity = Object.keys(msgResult.body);
+  const val = Object.values(msgResult.body)[0];
+  const { value } = val[0];
+  const messageToAdd = { entity: entity[0], value: value };
+  console.log(messageToAdd);
+  return messageToAdd;
 };

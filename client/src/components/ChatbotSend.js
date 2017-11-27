@@ -2,11 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 ChatbotSend.PropTypes = {
-  sendMessage: PropTypes.func,
-  messages: PropTypes.array
+  sendMessage: PropTypes.func
 };
 
-export default function ChatbotSend({ sendMessage, messages }) {
+export default function ChatbotSend({ sendMessage }) {
   return (
 <div>
     <div>

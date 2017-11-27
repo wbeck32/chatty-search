@@ -26,7 +26,7 @@ router.get(
       .set('Authorization', token)
       .query(message)
       .use(jsonp);
-    console.log(23, messageResults.body);
+    console.log(23, messageResults.body.entities);
     const { entities } = messageResults.body;
     return entities;
   })

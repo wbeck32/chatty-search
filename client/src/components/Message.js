@@ -5,10 +5,11 @@ Message.PropTypes = {
   message: PropTypes.string
 };
 
-export default function Message({ message }) {
+export default function Message( {message} ) {
+
   return (
     <div>
-        <span>{message}!</span>
+        <span>{message.value}</span>
     </div>
   );
 }

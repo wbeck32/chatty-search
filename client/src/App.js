@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './scss/App.css';
 import _ from 'lodash';
-import { sendMessage } from '../src/services/wit-api';
+import { submitMessage } from '../src/services/wit-api';
 import ChatbotMessages from '../src/components/ChatbotMessages';
 import ChatbotSend from '../src/components/ChatbotSend';
 import DisplayResults from '../src/components/DisplayResults';
@@ -15,20 +15,33 @@ class App extends Component {
     };
   }
 
-  loadMoreHistory() {
-    return new Promise((resolve, reject) => {
-      let more = _.range(20).map(v => 'yo');
+  async sendMessage( q ) {
+    const { messages } = this.state;
+    const addMessage = await submitMessage(q);
+    messages.push(addMessage)
+    console.log(33, addMessage)
+    this.setState({ messages: messages });
+  }
+
+  async loadMoreHistory() {
+      let more = await _.range(20).map(v => 'yo');
       this.setState({ messages: this.state.messages.concat(more) });
-      resolve();
-    });
   }
 
   render() {
-    const { messages } = this.props;
+    const { messages } = this.state;
     return (
       <div className="App">
-        <ChatbotMessages messages={messages} />
-        <ChatbotSend sendMessage={q => sendMessage(q)} />
+      <ChatView
+      className="content"
+      scrollLoadThreshold={50}
+      onInfiniteLoad={this.loadMoreHistory}>
+      <ChatbotMessages messages={messages} />
+
+      </ChatView>
+
+
+        <ChatbotSend sendMessage={q => this.sendMessage(q)} />
         <DisplayResults />
       </div>
     );
@@ -36,11 +49,3 @@ class App extends Component {
 }
 
 export default App;
-
-// <ChatView
-// className="content"
-// flipped={true}
-// scrollLoadThreshold={50}
-// onInfiniteLoad={this.loadMoreHistory.bind(this)}>
-// {this.state.messages.map((v, ix) => <div key={ix}>{`${ix}: ${v}`}</div>)}
-// </ChatView>
