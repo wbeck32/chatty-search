@@ -1,0 +1,70 @@
+{
+            "data" : [
+              {
+                "text" : "$20",
+                "entities" : [
+                  {
+                    "entity" : "amount_of_money",
+                    "value" : "20",
+                    "role" : "budget",
+                    "start" : 1,
+                    "end" : 3
+                  }
+                ]
+              },
+              {
+                "text" : "I want to buy an elephant"
+              },
+              {
+                "text" : "I want to buy an elephant.",
+                "entities" : [
+                  {
+                    "entity" : "search_term",
+                    "value" : "\"elephant\"",
+                    "role" : "search_term",
+                    "start" : 17,
+                    "end" : 24
+                  }
+                ]
+              },
+              {
+                "text" : "local"
+              },
+              {
+                "text" : "mailed",
+                "entities" : [
+                  {
+                    "entity" : "location_preference",
+                    "value" : "\"shipped\""
+                  }
+                ]
+              },
+              {
+                "text" : "my zip code is 97210",
+                "entities" : [
+                  {
+                    "entity" : "number",
+                    "value" : "\"97210\"",
+                    "role" : "zip_code",
+                    "start" : 15,
+                    "end" : 20
+                  }
+                ]
+              },
+              {
+                "text" : "new",
+                "entities" : [
+                  {
+                    "entity" : "condition",
+                    "value" : "\"new\""
+                  }
+                ]
+              },
+              {
+                "text" : "old"
+              },
+              {
+                "text" : "ship it to me"
+              }
+            ]
+          }
