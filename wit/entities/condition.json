@@ -1,0 +1,29 @@
+{
+            "data" : {
+              "lookups" : [
+                "keywords"
+              ],
+              "name" : "condition",
+              "lang" : "en",
+              "exotic" : false,
+              "id" : "condition",
+              "values" : [
+                {
+                  "value" : "new",
+                  "expressions" : [
+                    "brand new",
+                    "shiny"
+                  ]
+                },
+                {
+                  "value" : "used",
+                  "expressions" : [
+                    "old",
+                    "used"
+                  ]
+                }
+              ],
+              "doc" : "User-defined entity",
+              "builtin" : false
+            }
+          }

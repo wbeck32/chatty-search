@@ -1,0 +1,31 @@
+{
+            "data" : {
+              "lookups" : [
+                "keywords"
+              ],
+              "name" : "location_preference",
+              "lang" : "en",
+              "exotic" : false,
+              "id" : "location_preference",
+              "values" : [
+                {
+                  "value" : "local",
+                  "expressions" : [
+                    "local",
+                    "nearby",
+                    "pick it up"
+                  ]
+                },
+                {
+                  "value" : "shipped",
+                  "expressions" : [
+                    "mailed",
+                    "ship it to me",
+                    "shipped"
+                  ]
+                }
+              ],
+              "doc" : "User-defined entity",
+              "builtin" : false
+            }
+          }
