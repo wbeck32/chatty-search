@@ -23,7 +23,7 @@ You: I want to buy an elephant
 
 Bot: Great! Do you want a new or used elephant?
 
-You: New
+You: used
 
 Bot: Excellent! Let's find you a used elephant. How much do you want to spend?
 
@@ -38,6 +38,10 @@ Bot: So you want to have something shipped. Great. Whats your ZIP code?
 You: 97210
 
 Bot: Thanks for your ZIP code. Just give me a few moments to search.
+
+...
+
+Bot: Here are the top ten results that meet your criteria.
 
 # todos
 
