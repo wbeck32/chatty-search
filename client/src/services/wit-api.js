@@ -27,7 +27,6 @@ export const handleMessage = async displayMessages => {
         intent: 'condition'
       };
       return msg;
-      break;
     case 'condition':
       params.condition = currVal.value;
       msg = {
@@ -42,7 +41,6 @@ export const handleMessage = async displayMessages => {
         intent: 'location_pref'
       };
       return msg;
-      break;
     case 'budget':
       params.budget = currVal.value;
       msg = {
@@ -50,7 +48,6 @@ export const handleMessage = async displayMessages => {
         intent: 'budget'
       };
       return msg;
-      break;
     case 'location_pref':
       params.location_pref = currVal.value;
       msg = {
@@ -61,7 +58,6 @@ export const handleMessage = async displayMessages => {
         intent: 'zip_code'
       };
       return msg;
-      break;
     case 'zip_code':
       params.zip_code = currVal.value;
       msg = {
@@ -70,7 +66,6 @@ export const handleMessage = async displayMessages => {
         intent: ''
       };
       return msg;
-      break;
     default:
       console.log(`🤖  ${intent}`);
       break;
