@@ -1,4 +1,5 @@
-# chatty-search - bot for finding ten things to buy on eBay based on certain criteria
+# chatty-search
+## a bot for finding ten things to buy on eBay based on certain criteria
 
 The bot starts by asking what you want to find, then continues through the conversation flow until it has all the necessary search parameters: search_term, condition, location_pref, budget and zip_code.
 
