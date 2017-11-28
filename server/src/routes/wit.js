@@ -25,6 +25,7 @@ router.get(
       .query(message)
       .use(jsonp);
     const { entities } = messageResults.body;
+    console.log(entities)
     return entities;
   })
 );

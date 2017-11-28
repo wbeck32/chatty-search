@@ -2,15 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 Messages.PropTypes = {
-  messages: PropTypes.array
+  displayMessages: PropTypes.array
 };
 
-export default function Messages({ messages }) {
+export default function Messages({ displayMessages }) {
+  console.log(90,displayMessages)
   return (
     <ul>
-      {messages.map((message, i) => (
-        <li key={i}>
-          <Message message={message} />
+      {displayMessages.map((message, i) => (
+        <li key={i}>{message.value}
+          <Message message={message.value} />
         </li>
       ))}
     </ul>
@@ -24,7 +25,7 @@ Message.PropTypes = {
 export function Message({ message }) {
   return (
     <div>
-      <span>{message.value}</span>
+      <span>{message}</span>
     </div>
   );
 }
