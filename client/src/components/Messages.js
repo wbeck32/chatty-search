@@ -6,7 +6,6 @@ Messages.PropTypes = {
 };
 
 export default function Messages({ displayMessages }) {
-  console.log(90,displayMessages)
   return (
     <ul>
       {displayMessages.map((message, i) => (

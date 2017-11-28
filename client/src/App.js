@@ -19,7 +19,6 @@ class App extends Component {
           intent:'greetings'
         }
       ],
-      messageData: [],
       results: [],
       response: '',
       params: {
@@ -34,9 +33,7 @@ class App extends Component {
 
   async sendMessage(q){
     let { displayMessages, messageData } = this.state;
-    console.log(1111,q)
     const entity = await submitMessage(q);
-    console.log(222,entity)
     displayMessages.push({value:q.q, intent:entity.entity});
     this.setState({
       displayMessages: displayMessages
@@ -50,9 +47,7 @@ class App extends Component {
 
   async respondToMessage() {
     const { displayMessages, response } = this.state;
-    console.log(3323, displayMessages, response)
     const resp = await handleMessage(displayMessages);
-    console.log(222,resp)
     displayMessages.push(resp);
     this.setState({
       response: resp.value,
@@ -75,7 +70,6 @@ class App extends Component {
 
   render() {
     const { displayMessages, results, response } = this.state;
-    console.log(displayMessages)
     return (
       <div className="App">
         <ReactChatView

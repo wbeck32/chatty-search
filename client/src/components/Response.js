@@ -7,7 +7,6 @@ Response.PropTypes = {
 
 
 export default function Response({ response }) {
-  console.log(55,response)
   return (
     <div>
       <span>{response}</span>
