@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+
 Messages.PropTypes = {
   displayMessages: PropTypes.array
 };

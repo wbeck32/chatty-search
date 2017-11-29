@@ -7,7 +7,6 @@ import Send from '../src/components/Send';
 import Results from '../src/components/Results';
 import Response from '../src/components/Response';
 import Portal from '../src/components/Portal'
-// import ChatBot from '../src/components/Portal'
 
 class App extends Component {
   constructor(props) {
@@ -72,15 +71,19 @@ class App extends Component {
     this.setState({ messages: this.state.messages.concat(more) });
   }
 
+
   render() {
     const { displayMessages, results, response, rowCount } = this.state;
 
     return (
         <div className="App">
         <div id="chatty-search">
-<Portal/>
+
+
+        <Portal>
 
         <Messages displayMessages={displayMessages} />
+          </Portal>
           <Send sendMessage={q => this.sendMessage(q)} />
           </div>
 

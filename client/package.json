@@ -11,6 +11,7 @@
     "styled-components": "^2.2.4",
     "superagent": "^3.8.1"
   },
+  "scripts": {
   "build-css": "node-sass-chokidar src/ -o src/",
   "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
   "start-js": "react-scripts start",
@@ -19,4 +20,6 @@
   "build": "npm-run-all build-css build-js",
   "test": "react-scripts test --env=jsdom",
   "eject": "react-scripts eject"
+  },
+  "proxy": "http://localhost:3001"
 }

@@ -1,0 +1,15 @@
+{
+            "data" : {
+              "lookups" : [
+                "free-text",
+                "free-text",
+                "keywords"
+              ],
+              "name" : "search_term",
+              "lang" : "en",
+              "exotic" : false,
+              "id" : "search_term",
+              "doc" : "User-defined entity",
+              "builtin" : false
+            }
+          }
