@@ -1,19 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import MuiThemeProvider from '../../node_modules/material-ui/styles/MuiThemeProvider';
-import getMuiTheme from '../../node_modules/material-ui/styles/getMuiTheme';
-import FlatButton from '../../node_modules/material-ui/FlatButton';
+
 
 Messages.PropTypes = {
   displayMessages: PropTypes.array
 };
-Messages.contextTypes = {
-  muiTheme: PropTypes.object
-};
+
 
 export default function Messages({ displayMessages }) {
   return (
-   <div> <FlatButton>button</FlatButton>
+   <div>
 
     <ul>
       {displayMessages.map((message, i) => (

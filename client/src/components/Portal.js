@@ -1,13 +1,17 @@
 import React from 'react';
-import AppBar from '../../node_modules/material-ui/AppBar';
-import ReactChatView from 'react-chatview';
+import { transform } from 'babel-core';
+import * as babel from 'babel-core';
+const { render, Text } = require('@mainframe/bot-ui')
 
 
 export default function Portal({}) {
+  const ui = render(<Text>Hello bot!</Text>)
+  babel.transform(ui)
+console.log(11,ui)
   return (
-    <div>
-      <AppBar title="Get to chatting!" />
+    <div id="chatty-search">
+    {ui.props.children}
+  </div>
 
-    </div>
   );
 }

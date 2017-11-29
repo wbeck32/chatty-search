@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import MuiThemeProvider from '../node_modules/material-ui/styles/MuiThemeProvider';
 import './scss/App.css';
 import _ from 'lodash';
 import { submitMessage, handleMessage } from '../src/services/wit-api';
@@ -8,12 +7,12 @@ import Messages from '../src/components/Messages';
 import Send from '../src/components/Send';
 import Results from '../src/components/Results';
 import Response from '../src/components/Response';
-import ReactChatView from 'react-chatview';
 import Portal from '../src/components/Portal'
 
 class App extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       displayMessages: [
         {
@@ -73,24 +72,24 @@ class App extends Component {
     this.setState({ messages: this.state.messages.concat(more) });
   }
 
+
+
   render() {
     const { displayMessages, results, response, rowCount } = this.state;
+
     return (
-      <MuiThemeProvider>
         <div className="App">
+        <div id="chatty-search">
+
         <Portal>
-        <ReactChatView
-        className="content"
-        scrollLoadThreshold={50}
-        onInfiniteLoad={this.loadMoreHistory}>
+
         <Messages displayMessages={displayMessages} />
-      </ReactChatView>
           </Portal>
           <Send sendMessage={q => this.sendMessage(q)} />
+          </div>
 
           <Results results={results} />
         </div>
-      </MuiThemeProvider>
     );
   }
 }

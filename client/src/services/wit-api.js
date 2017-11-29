@@ -1,6 +1,7 @@
 import { firstEntity } from '../services/wit-helpers';
 import { checkKeywords } from './ebay-api'
 const superagent = require('superagent');
+
 let params = {};
 
 export const submitMessage = async message => {

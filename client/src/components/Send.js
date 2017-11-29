@@ -1,12 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import TextField from '../../node_modules/material-ui/TextField'
+const { render, Form, TextInput } = require('@mainframe/bot-ui')
+
 
 Send.PropTypes = {
   sendMessage: PropTypes.func
 };
 
 export default function Send({ sendMessage }) {
+const sendForm = render(
+  <Form>
+  <TextInput>enter it here</TextInput>
+  </Form>
+)
+console.log(33, sendForm)
   return (
 <div>
     <div>
@@ -22,7 +29,7 @@ export default function Send({ sendMessage }) {
         <button type="submit" name="add image">
           speak
         </button>
-        <TextField
+        <input type="text"
         name="query"
       />
       </form>
