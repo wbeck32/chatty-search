@@ -7,23 +7,26 @@ Send.PropTypes = {
 
 export default function Send({ sendMessage }) {
   return (
-    <div>
-      <div>
-        <form
-          className=""
-          onSubmit={event => {
-            event.preventDefault();
-            const form = event.target;
-            const { query } = form.elements;
-            sendMessage({ q: query.value });
-            form.reset();
-          }}>
-          <button type="submit" name="add image">
-            speak
-          </button>
-          <input type="text" name="query" />
-        </form>
-      </div>
+    <div className="chat-message clearfix">
+      <form
+        className=""
+        onSubmit={event => {
+          event.preventDefault();
+          const form = event.target;
+          const { query } = form.elements;
+          sendMessage({ q: query.value });
+          form.reset();
+        }}>
+        <textarea
+          id="message-to-send"
+          name="query"
+          placeholder="Type your message"
+          rows="3"
+        />
+        <i className="fa fa-file-o" />&nbsp;&nbsp;&nbsp;
+        <i className="fa fa-file-image-o" />
+        <button>Send</button>
+      </form>
     </div>
   );
 }

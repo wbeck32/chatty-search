@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-import '.scss/App.css';
+import './scss/App.css';
+import _ from 'lodash';
 import { submitMessage, handleMessage } from '../src/services/wit-api';
 import { checkKeywords, callFindingAPI } from '../src/services/ebay-api';
 import Messages from '../src/components/Messages';
 import Send from '../src/components/Send';
 import Results from '../src/components/Results';
 import Response from '../src/components/Response';
-import Portal from '../src/components/Portal'
+import Portal from '../src/components/Portal';
 
 class App extends Component {
   constructor(props) {
@@ -16,7 +17,8 @@ class App extends Component {
       displayMessages: [
         {
           value: 'Hello! What would you like to search for today?',
-          intent: 'greetings'
+          intent: 'greetings',
+          user: 'bot'
         }
       ],
       results: [],
@@ -45,25 +47,27 @@ class App extends Component {
   async refineKeywords(entities, _text) {
     const { displayMessages } = this.state;
     const refinedKeywords = await checkKeywords(_text);
-    if (refinedKeywords.body.ack === "Success") {
-    displayMessages.push({
-      value: 'Did you mean ' + refinedKeywords.body.keywords + '?',
-      intent: ''
-    });
-    this.setState({ displayMessages: displayMessages });
-  } else {
-    this.respondToMessage(entities, _text);
+    if (refinedKeywords.body.ack === 'Success') {
+      displayMessages.push({
+        value: 'Did you mean ' + refinedKeywords.body.keywords + '?',
+        intent: '',
+        user: 'bot'
+      });
+      this.setState({ displayMessages: displayMessages });
+    } else {
+      this.respondToMessage(entities, _text);
+    }
   }
-}
 
   async respondToMessage(entities, _text) {
     const { displayMessages, response } = this.state;
     const resp = await handleMessage(displayMessages);
-    displayMessages.push(resp);
-    this.setState({
-      response: resp.value,
-      displayMessages: displayMessages
-    });
+    console.log(99, resp)
+    // displayMessages.push(resp);
+    // this.setState({
+    //   response: resp.value,
+    //   displayMessages: displayMessages
+    // });
   }
 
   async loadMoreHistory() {
@@ -71,24 +75,18 @@ class App extends Component {
     this.setState({ messages: this.state.messages.concat(more) });
   }
 
-
   render() {
-    const { displayMessages, results, response, rowCount } = this.state;
+    const { displayMessages, results, response } = this.state;
 
     return (
-        <div className="App">
+      <div className="App">
         <div id="chatty-search">
-
-
-        <Portal>
-
-        <Messages displayMessages={displayMessages} />
-          </Portal>
+          <Portal displayMessages={displayMessages} />
           <Send sendMessage={q => this.sendMessage(q)} />
-          </div>
-
-          <Results results={results} />
         </div>
+
+        <Results results={results} />
+      </div>
     );
   }
 }
