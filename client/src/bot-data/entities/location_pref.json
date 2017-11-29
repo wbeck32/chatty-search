@@ -3,23 +3,25 @@
               "lookups" : [
                 "keywords"
               ],
-              "name" : "condition",
+              "name" : "location_pref",
               "lang" : "en",
               "exotic" : false,
-              "id" : "condition",
+              "id" : "location_pref",
               "values" : [
                 {
-                  "value" : "new",
+                  "value" : "local",
                   "expressions" : [
-                    "brand new",
-                    "shiny"
+                    "local",
+                    "nearby",
+                    "pick it up"
                   ]
                 },
                 {
-                  "value" : "used",
+                  "value" : "shipped",
                   "expressions" : [
-                    "old",
-                    "used"
+                    "mailed",
+                    "ship it to me",
+                    "shipped"
                   ]
                 }
               ],

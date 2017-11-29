@@ -31,14 +31,16 @@ class App extends Component {
     };
   }
 
+
   async sendMessage(q){
-    let { displayMessages, messageData } = this.state;
-    const entity = await submitMessage(q);
-    displayMessages.push({value:q.q, intent:entity.entity});
-    this.setState({
-      displayMessages: displayMessages
-    });
-    this.respondToMessage();
+    let { displayMessages } = this.state;
+    const submittedMessage = await submitMessage(q);
+    console.log(1, submittedMessage)
+    // displayMessages.push({value:q.q, intent:entity.entity});
+    // this.setState({
+    //   displayMessages: displayMessages
+    // });
+    // this.respondToMessage();
     // if (addMessage.entity === 'search_term') {
     // make sure all search params are populated
     // this.searchEbay(addMessage.value);
@@ -55,13 +57,10 @@ class App extends Component {
     });
   }
 
-  async searchEbay(keywords) {
-    const refinedKeywords = await checkKeywords(keywords);
-    const searchKeys =
-      refinedKeywords.body[0] !== '' ? refinedKeywords.body : keywords;
-    const results = await callFindingAPI(encodeURI(searchKeys));
-    this.setState({ results: results });
-  }
+  // async searchEbay(keywords) {
+  //   const results = await callFindingAPI(encodeURI(searchKeys));
+  //   this.setState({ results: results });
+  // }
 
   async loadMoreHistory() {
     let more = await _.range(20).map(v => 'yo');

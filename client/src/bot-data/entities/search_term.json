@@ -2,7 +2,8 @@
             "data" : {
               "lookups" : [
                 "free-text",
-                "free-text"
+                "free-text",
+                "keywords"
               ],
               "name" : "search_term",
               "lang" : "en",
