@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import TextField from '../../node_modules/material-ui/TextField'
 
-ChatbotSend.PropTypes = {
+Send.PropTypes = {
   sendMessage: PropTypes.func
 };
 
-export default function ChatbotSend({ sendMessage }) {
+export default function Send({ sendMessage }) {
   return (
 <div>
     <div>
@@ -21,7 +22,9 @@ export default function ChatbotSend({ sendMessage }) {
         <button type="submit" name="add image">
           speak
         </button>
-        <input type="text" className="" name="query" placeholder="speak" />
+        <TextField
+        name="query"
+      />
       </form>
     </div>
     </div>

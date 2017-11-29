@@ -6,8 +6,8 @@ let params = {};
 export const submitMessage = async message => {
   const msgResult = await superagent.get('/wit/message').query(message);
   console.log(2, msgResult)
-  const entity = await firstEntity(msgResult.body);
-  return entity;
+  // const entity = await firstEntity(msgResult.body);
+  return msgResult;
 };
 
 export const handleMessage = async displayMessages => {
@@ -25,8 +25,7 @@ export const handleMessage = async displayMessages => {
   switch (intent) {
     case 'search_term':
       params.search_term = currVal.value;
-      const refinedKeywords = await checkKeywords(currVal.value);
-      console.log(3, refinedKeywords)
+
       msg = {
         value: 'Great! Do you want a new or used ' + params.search_term + '?',
         intent: 'condition'
