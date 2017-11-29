@@ -1,0 +1,22 @@
+{
+  "name": "chatty-search",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "react": "^16.2.0",
+    "react-chatview": "^0.2.4",
+    "react-dom": "^16.2.0",
+    "react-scripts": "1.0.17",
+    "react-simple-chatbot": "^0.2.9",
+    "styled-components": "^2.2.4",
+    "superagent": "^3.8.1"
+  },
+  "build-css": "node-sass-chokidar src/ -o src/",
+  "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
+  "start-js": "react-scripts start",
+  "start": "npm-run-all -p watch-css start-js",
+  "build-js": "react-scripts build",
+  "build": "npm-run-all build-css build-js",
+  "test": "react-scripts test --env=jsdom",
+  "eject": "react-scripts eject"
+}
