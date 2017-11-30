@@ -7,8 +7,7 @@ import Choose from './Choose';
 // };
 
 export default function Messages({ displayMessages, sendMessage}) {
-  //if {message.user} is not bot, add align-right
-  // <div className="message-data align-right">
+console.log(21, displayMessages)
   return (
     <div className="chat-history">
       <ul>

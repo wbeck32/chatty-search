@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import './scss/App.css';
-import _ from 'lodash';
-import { submitMessage, handleMessage } from '../src/services/wit-api';
+import {
+  submitMessage,
+  handleMessage,
+  buildDate
+} from '../src/services/wit-api';
 import { checkKeywords, callFindingAPI } from '../src/services/ebay-api';
-import Messages from '../src/components/Messages';
 import Send from '../src/components/Send';
 import Results from '../src/components/Results';
 import Portal from '../src/components/Portal';
@@ -15,11 +17,13 @@ class App extends Component {
     this.state = {
       displayMessages: [
         {
-          value: 'Hello! What would you like to search for today?',
+          value:
+            "Hello! I'm here to help you find items to buy on eBay. What would you like to search for today?",
           intent: 'search_term',
           user: 'bot',
           choose: false,
-          date: this.buildDate()
+          entities: 'entities',
+          date: buildDate()
         }
       ],
       results: [],
@@ -33,15 +37,8 @@ class App extends Component {
     };
   }
 
-  buildDate() {
-    let date = new Date();
-    date = date.toLocaleString();
-    return date;
-  }
-
   async sendMessage(q) {
     let { displayMessages, params } = this.state;
-
     if (q.message !== undefined) {
       q.choose !== undefined ? (q.message.choose = q.choose) : q.message.choose;
       q.intent !== undefined
@@ -50,8 +47,7 @@ class App extends Component {
           : (q.message.intent = q.intent)
         : q.message.intent;
       q = q.message;
-      console.log(9999999, q)
-      params.search_term = q.value
+      params.search_term = q.value;
       this.setState({ params: params });
       this.respondToMessage();
     } else {
@@ -65,7 +61,7 @@ class App extends Component {
           intent: 'search_term',
           user: 'notbot',
           choose: false,
-          date: this.buildDate()
+          date: buildDate()
         });
         this.setState({ displayMessages: displayMessages });
         this.refineKeywords();
@@ -76,7 +72,7 @@ class App extends Component {
           intent: q.intent,
           user: 'notbot',
           choose: false,
-          date: this.buildDate()
+          date: buildDate()
         });
         this.setState({ displayMessages: displayMessages });
         this.respondToMessage();
@@ -85,7 +81,7 @@ class App extends Component {
   }
 
   async refineKeywords() {
-    const { displayMessages } = this.state;
+    const { displayMessages, params } = this.state;
     const tmp = Array.from(displayMessages);
     const lastMsg = tmp.pop();
     const refinedKeywords = await checkKeywords(lastMsg);
@@ -95,13 +91,14 @@ class App extends Component {
         intent: 'confirm_keyword',
         user: 'bot',
         choose: true,
-        date: this.buildDate()
+        date: buildDate()
       });
       this.setState({ displayMessages: displayMessages });
       this.respondToMessage();
       // return;
     } else {
-      this.setState({ displayMessages: lastMsg });
+      params.search_term = lastMsg.value;
+      this.setState({ params: params });
       this.respondToMessage();
     }
   }
@@ -113,24 +110,26 @@ class App extends Component {
       intent: 'search_term',
       user: 'notbot',
       choose: false,
-      date: this.buildDate()
+      date: buildDate()
     };
     const { displayMessages } = this.state;
     displayMessages.push(pleaseHold);
     this.setState({ displayMessages: displayMessages });
-
     const searchResults = await callFindingAPI(q);
     console.log(1000, searchResults);
   }
 
   async respondToMessage() {
-    const { displayMessages, params, response } = this.state;
-    console.log(121212, displayMessages, params)
+    const { displayMessages, params } = this.state;
     const tmp = Array.from(displayMessages);
     const lastMsg = tmp.pop();
-    console.log(202002, lastMsg);
-    const msgResponse = await handleMessage(lastMsg, params);
-    console.log(33, msgResponse);
+    const wittedMsg = await submitMessage(lastMsg)
+    console.log(88, wittedMsg)
+    const msgResponse = await handleMessage(wittedMsg, params);
+    console.log(89, msgResponse)
+    displayMessages.push(msgResponse)
+    this.setState({displayMessages: displayMessages})
+    // console.log(33, msgResponse);
     // if (resp.body.ack && resp.body.ack === 'Warning') {
     //no suggested keywords
 
@@ -140,11 +139,6 @@ class App extends Component {
     //   response: resp.value,
     //   displayMessages: displayMessages
     // });
-  }
-
-  async loadMoreHistory() {
-    let more = await _.range(20).map(v => 'yo');
-    this.setState({ messages: this.state.messages.concat(more) });
   }
 
   render() {
@@ -160,7 +154,6 @@ class App extends Component {
           />
           <Send lastMsg={lastMsg} sendMessage={q => this.sendMessage(q)} />
         </div>
-
         <Results results={results} />
       </div>
     );
