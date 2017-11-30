@@ -3,6 +3,7 @@ const superagent = require('superagent');
 
 export const checkKeywords = async data => {
   const refinedKeywords = await superagent.get('/ebay/refineKeywords').query({data});
+  console.log(989, refinedKeywords)
   return refinedKeywords;
 };
 

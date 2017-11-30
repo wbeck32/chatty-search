@@ -6,7 +6,6 @@ import { checkKeywords, callFindingAPI } from '../src/services/ebay-api';
 import Messages from '../src/components/Messages';
 import Send from '../src/components/Send';
 import Results from '../src/components/Results';
-import Response from '../src/components/Response';
 import Portal from '../src/components/Portal';
 
 class App extends Component {
@@ -18,7 +17,8 @@ class App extends Component {
         {
           value: 'Hello! What would you like to search for today?',
           intent: 'greetings',
-          user: 'bot'
+          user: 'bot',
+          choose: false
         }
       ],
       results: [],
@@ -37,6 +37,12 @@ class App extends Component {
     let { displayMessages } = this.state;
     const submittedMessage = await submitMessage(q);
     const { entities, _text } = submittedMessage.body;
+    displayMessages.push({
+      value: _text,
+      intent: '',
+      user: '',
+      choose: false
+    });
     if (Object.keys(entities).includes('search_term')) {
       this.refineKeywords(entities, _text);
     } else {
@@ -51,18 +57,23 @@ class App extends Component {
       displayMessages.push({
         value: 'Did you mean ' + refinedKeywords.body.keywords + '?',
         intent: '',
-        user: 'bot'
+        user: 'bot',
+        choose: true
       });
       this.setState({ displayMessages: displayMessages });
+      //display yes/no buttons
+      return;
     } else {
       this.respondToMessage(entities, _text);
+      return;
     }
   }
 
   async respondToMessage(entities, _text) {
+    console.log(100, entities);
     const { displayMessages, response } = this.state;
     const resp = await handleMessage(displayMessages);
-    console.log(99, resp)
+    console.log(99, resp);
     // displayMessages.push(resp);
     // this.setState({
     //   response: resp.value,
@@ -76,11 +87,11 @@ class App extends Component {
   }
 
   render() {
-    const { displayMessages, results, response } = this.state;
+    const { displayMessages, results, response, choose } = this.state;
 
     return (
       <div className="App">
-        <div id="chatty-search">
+        <div className="chat" id="chatty-search">
           <Portal displayMessages={displayMessages} />
           <Send sendMessage={q => this.sendMessage(q)} />
         </div>

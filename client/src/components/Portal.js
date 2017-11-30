@@ -5,7 +5,7 @@ export default function Portal({displayMessages}) {
   return (
     <div className="chat-history">
 
-  <Messages displayMessages={displayMessages}/>
+  <Messages displayMessages={displayMessages} />
   </div>
 );
 }
