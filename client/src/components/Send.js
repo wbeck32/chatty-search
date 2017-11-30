@@ -5,7 +5,10 @@ import React from 'react';
 //   sendMessage: PropTypes.func
 // };
 
-export default function Send({ sendMessage }) {
+export default function Send({ lastMsg, sendMessage }) {
+  // console.log(11001100, lastMsg)
+
+
   return (
     <div className="chat-message clearfix">
       <form
@@ -14,7 +17,7 @@ export default function Send({ sendMessage }) {
           event.preventDefault();
           const form = event.target;
           const { query } = form.elements;
-          sendMessage({ q: query.value });
+          sendMessage({ value: query.value, intent: lastMsg.intent });
           form.reset();
         }}>
         <textarea

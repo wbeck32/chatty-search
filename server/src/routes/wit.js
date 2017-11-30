@@ -9,7 +9,8 @@ let jsonp = require('superagent-jsonp');
 router.get(
   '/message',
   asyncIt(async (req, res, next) => {
-    const { q } = req.query;
+    const { value } = req.query;
+    console.log(88, req.query)
     const token = 'Bearer ' + process.env.REACT_APP_WIT_TOKEN;
     const message = querystring.stringify({
       q: q,

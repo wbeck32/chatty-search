@@ -1,19 +1,24 @@
-import { checkKeywords } from './ebay-api'
 const superagent = require('superagent');
 
 let params = {};
 
 export const submitMessage = async message => {
+  message.choose !== undefined
+    ? (message.message.choose = message.choose)
+    : message;
+  message.intent !== undefined
+    ? (message.message.intent = message.intent)
+    : message;
+  // console.log(1, message)
+
   const msgResult = await superagent.get('/wit/message').query(message);
-  console.log(2, msgResult)
-  // const entity = await firstEntity(msgResult.body);
+  // console.log(2, msgResult)
   return msgResult;
 };
 
-export const handleMessage = async lastMsg => {
-
+export const handleMessage = async (lastMsg, params) => {
   let msg = '';
-  console.log(223, lastMsg)
+  console.log(223, lastMsg, params);
 
   if (!lastMsg.intent) {
     console.log('🤖  Try something else. I got no intent :)');
@@ -22,14 +27,15 @@ export const handleMessage = async lastMsg => {
   }
   switch (lastMsg.intent) {
     case 'greetings':
-    msg = {
-      value: 'my intent is greetings'
-    }
-    return msg;
-    case 'confirm_keyword':
       msg = {
-        value: 'my intent is confirm_keyword'
-      }
+        value: 'my intent is greetings'
+      };
+      return msg;
+    case 'confirm_keyword':
+      msg = lastMsg;
+      return msg;
+    case 'search_term_confirmed':
+      msg = lastMsg.message;
       return msg;
     case 'search_term':
       params.search_term = lastMsg.value;
@@ -54,9 +60,12 @@ export const handleMessage = async lastMsg => {
     case 'budget':
       params.budget = lastMsg.value;
       msg = {
-        value: 'So you have a budget of ' + params.budget + '.  Do you want a ' +
-        params.search_term +
-        ' you can pick up locally or is it OK to have it shipped',
+        value:
+          'So you have a budget of ' +
+          params.budget +
+          '.  Do you want a ' +
+          params.search_term +
+          ' you can pick up locally or is it OK to have it shipped',
         intent: 'location_pref'
       };
       return msg;
@@ -72,6 +81,14 @@ export const handleMessage = async lastMsg => {
       return msg;
     case 'zip_code':
       params.zip_code = lastMsg.value;
+      msg = {
+        value:
+          'Thanks for your ZIP code. Just give me a few moments to search.',
+        intent: ''
+      };
+      return msg;
+    case 'display_results':
+      // params.zip_code = lastMsg.value;
       msg = {
         value:
           'Thanks for your ZIP code. Just give me a few moments to search.',

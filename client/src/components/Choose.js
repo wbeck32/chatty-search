@@ -21,8 +21,8 @@ export default function Choose({ message, sendMessage }) {
       <span className="message-data-name">{message.user}</span>
       <i className="fa fa-circle me" />
       <div className="message my-message">{'Did you mean '+message.value+'?'}
-      <div><Button onClick={target => sendMessage({message:message,choose:false, intent:'keywords_confirmed'})}>Yes</Button>
-      <Button onClick={target => sendMessage({message:message,choose:true, intent:'keywords_not_confirmed'})}>No</Button></div>
+      <div><Button onClick={target => sendMessage({message:message,choose:false, intent:'search_term_confirmed'})}>Yes</Button>
+      <Button onClick={target => sendMessage({message:message,choose:true, intent:'confirm_keyword'})}>No</Button></div>
       </div>
 
     </div>

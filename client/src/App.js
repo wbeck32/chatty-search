@@ -16,14 +16,13 @@ class App extends Component {
       displayMessages: [
         {
           value: 'Hello! What would you like to search for today?',
-          intent: 'greetings',
+          intent: 'search_term',
           user: 'bot',
           choose: false,
           date: this.buildDate()
         }
       ],
       results: [],
-      response: '',
       params: {
         search_term: '',
         location_pref: '',
@@ -41,33 +40,47 @@ class App extends Component {
   }
 
   async sendMessage(q) {
-    q.choose !== undefined ? q.message.choose = q.choose : q
-    q.intent !== undefined ? q.message.intent = q.intent : q
+    let { displayMessages, params } = this.state;
 
-    let { displayMessages } = this.state;
-    const submittedMessage = await submitMessage(q);
-    const { entities, _text } = submittedMessage.body;
-    if (Object.keys(entities).includes('search_term')) {
-      displayMessages.push({
-        value: _text,
-        intent: 'search_term',
-        user: 'notbot',
-        choose: false,
-        date: this.buildDate()
-      });
-      this.setState({ displayMessages: displayMessages });
-      this.refineKeywords();
-    } else {
-      console.log(2299, Object.keys(entities));
-      displayMessages.push({
-        value: _text,
-        intent: entities,
-        user: 'notbot',
-        choose: false,
-        date: this.buildDate()
-      });
-      this.setState({ displayMessages: displayMessages });
+    if (q.message !== undefined) {
+      q.choose !== undefined ? (q.message.choose = q.choose) : q.message.choose;
+      q.intent !== undefined
+        ? q.intent === 'keywords_confirmed'
+          ? (q.message.intent = 'search_term_confirmed')
+          : (q.message.intent = q.intent)
+        : q.message.intent;
+      q = q.message;
+      console.log(9999999, q)
+      params.search_term = q.value
+      this.setState({ params: params });
       this.respondToMessage();
+    } else {
+      if (
+        q.intent !== undefined &&
+        (q.intent === 'search_term' ||
+          Object.keys(q.intent).includes('search_term'))
+      ) {
+        displayMessages.push({
+          value: q.value,
+          intent: 'search_term',
+          user: 'notbot',
+          choose: false,
+          date: this.buildDate()
+        });
+        this.setState({ displayMessages: displayMessages });
+        this.refineKeywords();
+      } else {
+        // console.log(2299, q);
+        displayMessages.push({
+          value: q.value,
+          intent: q.intent,
+          user: 'notbot',
+          choose: false,
+          date: this.buildDate()
+        });
+        this.setState({ displayMessages: displayMessages });
+        this.respondToMessage();
+      }
     }
   }
 
@@ -86,16 +99,38 @@ class App extends Component {
       });
       this.setState({ displayMessages: displayMessages });
       this.respondToMessage();
-      return
+      // return;
+    } else {
+      this.setState({ displayMessages: lastMsg });
+      this.respondToMessage();
+    }
   }
-}
+
+  async searchForItems(q) {
+    // console.log(1000, q)
+    const pleaseHold = {
+      value: 'Please wait a few moments while I find some items for you.',
+      intent: 'search_term',
+      user: 'notbot',
+      choose: false,
+      date: this.buildDate()
+    };
+    const { displayMessages } = this.state;
+    displayMessages.push(pleaseHold);
+    this.setState({ displayMessages: displayMessages });
+
+    const searchResults = await callFindingAPI(q);
+    console.log(1000, searchResults);
+  }
 
   async respondToMessage() {
-    const { displayMessages, response } = this.state;
+    const { displayMessages, params, response } = this.state;
+    console.log(121212, displayMessages, params)
     const tmp = Array.from(displayMessages);
     const lastMsg = tmp.pop();
-    const resp = await handleMessage(lastMsg);
-    console.log(33, resp);
+    console.log(202002, lastMsg);
+    const msgResponse = await handleMessage(lastMsg, params);
+    console.log(33, msgResponse);
     // if (resp.body.ack && resp.body.ack === 'Warning') {
     //no suggested keywords
 
@@ -114,7 +149,8 @@ class App extends Component {
 
   render() {
     const { displayMessages, results } = this.state;
-
+    const tmp = Array.from(displayMessages);
+    const lastMsg = tmp.pop();
     return (
       <div className="App">
         <div className="chat" id="chatty-search">
@@ -122,7 +158,7 @@ class App extends Component {
             displayMessages={displayMessages}
             sendMessage={message => this.sendMessage(message)}
           />
-          <Send sendMessage={q => this.sendMessage(q)} />
+          <Send lastMsg={lastMsg} sendMessage={q => this.sendMessage(q)} />
         </div>
 
         <Results results={results} />

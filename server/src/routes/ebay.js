@@ -9,14 +9,16 @@ router.get(
   '/refineKeywords',
   asyncIt(async (req, res, next) => {
     const {value} = req.query;
+    console.log(90, value)
     const refine = querystring.stringify({
       'OPERATION-NAME': 'getSearchKeywordsRecommendation',
       'SERVICE-VERSION': '1.0.0',
       'RESPONSE-DATA-FORMAT': 'JSON',
-      keywords: value,
+      keywords: req.query.value,
       'SECURITY-APPNAME': process.env.REACT_APP_SECURITY_APPNAME,
       'GLOBAL-ID': 'EBAY-US'
     });
+    console.log(99999, refine)
     const refinedKeywords = await superagent
       .get('https://svcs.ebay.com/services/search/FindingService/v1')
       .query(refine);
@@ -32,12 +34,13 @@ router.get(
   router.get(
     '/findItem',
     asyncIt(async (req, res, next) => {
+      console.log(89899, req.query)
       const { keywords } = req.query;
       const findItems = querystring.stringify({
         'OPERATION-NAME': 'findItemsByKeywords',
         'SERVICE-VERSION': '1.0.0',
         'RESPONSE-DATA-FORMAT': 'JSON',
-        keywords: keywords,
+        keywords: req.query.value,
         'SECURITY-APPNAME': process.env.REACT_APP_SECURITY_APPNAME,
         'GLOBAL-ID': 'EBAY-US'
       });
