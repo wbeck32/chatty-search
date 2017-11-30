@@ -1,9 +1,4 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
-
-// Send.PropTypes = {
-//   sendMessage: PropTypes.func
-// };
 
 export default function Send({ lastMsg, sendMessage }) {
   return (
@@ -20,7 +15,7 @@ export default function Send({ lastMsg, sendMessage }) {
         <textarea
           id="message-to-send"
           name="query"
-          placeholder="Type your message"
+          placeholder="Speak!"
           rows="3"
         />
         <i className="fa fa-file-o" />&nbsp;&nbsp;&nbsp;

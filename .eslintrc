@@ -5,7 +5,8 @@
     "es6": true,
     "node": true
   },
-  "extends": ["eslint:recommended", "plugin:react/recommended"],
+  "plugins": ["eslint", "react"],
+  "extends": ["eslint:recommended", "react/recommended"],
   "parser": "babel-eslint",
   "parserOptions": {
     "ecmaVersion": 6,
@@ -62,7 +63,7 @@
         "ignoreChainWithDepth": 2
       }
     ],
-    "no-console": "off",
+    "no-console": 0,
     "no-multiple-empty-lines": [
       "error",
       {
@@ -119,6 +120,7 @@
         "enforceForRenamedProperties": false
       }
     ],
+    "prop-types" : 0,
     "quotes": ["error", "single"],
     "semi": ["error", "always"],
     "sort-keys": [

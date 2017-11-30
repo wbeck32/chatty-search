@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
 import './scss/App.css';
-import {
-  submitMessage,
-  handleMessage,
-  buildDate
-} from '../src/services/wit-api';
-import { checkKeywords, callFindingAPI } from '../src/services/ebay-api';
-import Send from '../src/components/Send';
-import Results from '../src/components/Results';
-import Portal from '../src/components/Portal';
+import { submitMessage, handleMessage } from './services/wit';
+import { checkKeywords, callFindingAPI } from './services/ebay';
+import {buildDate, switches} from './services/helpers'
+import Send from './components/Send';
+import Results from './components/Results';
+import Portal from './components/Portal';
 
 class App extends Component {
   constructor(props) {
@@ -18,10 +15,10 @@ class App extends Component {
       displayMessages: [
         {
           value:
-            "Hello! I'm here to help you find items to buy on eBay. What would you like to search for today?",
-          intent: 'search_term',
+          "Hello! I'm here to help you find items to buy on eBay. Are you ready to get started?",
+          intent: 'welcome',
           user: 'bot',
-          choose: false,
+          choose: true,
           date: buildDate()
         }
       ],
@@ -32,12 +29,18 @@ class App extends Component {
         condition: '',
         zip_code: '',
         budget: ''
-      }
-    };
+      },
+      switchData: {}
+  }
+}
+
+  async componentWillMount() {
+    const switchData = switches
+    this.setState({switchData: switches})
   }
 
   async sendMessage(q) {
-    console.log(100, q)
+    console.log(100, q);
     let { displayMessages, params } = this.state;
     if (q.message !== undefined) {
       q.choose !== undefined ? (q.message.choose = q.choose) : q.message.choose;
@@ -53,15 +56,14 @@ class App extends Component {
       return;
     }
     if (q.intent === 'search_term') {
-      displayMessages.push({
+      const roughKeys = ({
         value: q.value,
         intent: 'search_term',
         user: 'notbot',
         choose: false,
         date: buildDate()
       });
-      this.setState({ displayMessages: displayMessages });
-      this.refineKeywords();
+      this.refineKeywords(roughKeys);
       return;
     }
     console.log(2299, q);
@@ -69,22 +71,20 @@ class App extends Component {
       value: q.value,
       intent: q.intent,
       user: 'notbot',
-      choose: false,
+      choose: q.choose,
       date: buildDate()
     });
     this.setState({ displayMessages: displayMessages });
     this.respondToMessage();
   }
 
-  async refineKeywords() {
-    const { displayMessages, params } = this.state;
-    const tmp = Array.from(displayMessages);
-    const lastMsg = tmp.pop();
-    const refinedKeywords = await checkKeywords(lastMsg);
+  async refineKeywords(keywords) {
+const{displayMessages, params} = this.state
+    const refinedKeywords = await checkKeywords(keywords);
     // console.log(333, refinedKeywords)
     if (refinedKeywords.ack === 'Success') {
       displayMessages.push({
-        value: refinedKeywords.keywords,
+        value: 'Did you mean '+refinedKeywords.keywords+'?',
         intent: 'confirm_keyword',
         user: 'bot',
         choose: true,
@@ -93,9 +93,17 @@ class App extends Component {
       this.setState({ displayMessages: displayMessages });
       this.respondToMessage();
     } else {
-      params.search_term = lastMsg.value;
-      console.log(4536, displayMessages)
-      this.setState({ params : params });
+      params.search_term = keywords.value;
+      displayMessages.push({
+        value: 'Let\'s find you a '+params.search_term+'!',
+        intent: 'search_term_confirmed',
+        user: 'bot',
+        choose: false,
+        date: buildDate()
+      });
+
+      // console.log(4536, displayMessages);
+      this.setState({ params: params });
       this.respondToMessage();
     }
   }
@@ -118,19 +126,26 @@ class App extends Component {
 
   async respondToMessage() {
     const { displayMessages, params } = this.state;
+    const intentsNotToWit = ['welcome', 'greeting', 'goodbye','confirm_keyword', 'condition', 'location_pref']
     const tmp = Array.from(displayMessages);
     const lastMsg = tmp.pop();
-    console.log(87, lastMsg)
-    const wittedMsg = await submitMessage(lastMsg);
+    console.log(87, lastMsg);
+    let wittedMsg = lastMsg;
+    if(!intentsNotToWit.includes(lastMsg.intent)) {
+      wittedMsg = await submitMessage(lastMsg);
+    }
     console.log(88, wittedMsg);
     let msgResponse = await handleMessage(wittedMsg, params);
     console.log(89, msgResponse);
     displayMessages.push(msgResponse.message);
-    this.setState({ displayMessages: displayMessages, params: msgResponse.params });
+    this.setState({
+      displayMessages: displayMessages,
+      params: msgResponse.params
+    });
   }
 
   render() {
-    const { displayMessages, results } = this.state;
+    const { displayMessages, results, switchData } = this.state;
     const tmp = Array.from(displayMessages);
     const lastMsg = tmp.pop();
     return (
@@ -139,6 +154,7 @@ class App extends Component {
           <Portal
             displayMessages={displayMessages}
             sendMessage={message => this.sendMessage(message)}
+            switchData={switchData}
           />
           <Send lastMsg={lastMsg} sendMessage={q => this.sendMessage(q)} />
         </div>

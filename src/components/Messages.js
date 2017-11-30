@@ -1,19 +1,14 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
 import Choose from './Choose';
 
-// Messages.PropTypes = {
-//   displayMessages: PropTypes.array
-// };
-
-export default function Messages({ displayMessages, sendMessage}) {
+export default function Messages({ displayMessages, sendMessage, switchData}) {
   console.log(1, displayMessages)
   return (
     <div className="chat-history">
       <ul>
         {displayMessages.map((message, i) => (
           <li className="clearfix" key={i}>
-            <Message sendMessage={message => sendMessage(message)} message={message} />
+            <Message sendMessage={message => sendMessage(message)} message={message} switchData={switchData} />
           </li>
         ))}
       </ul>
@@ -21,16 +16,17 @@ export default function Messages({ displayMessages, sendMessage}) {
   );
 }
 
-// Message.PropTypes = {
-//   message: PropTypes.object
-// };
-
-export function Message({ message, sendMessage }) {
-
+export function Message({ message, sendMessage, switchData }) {
   console.log(2, message);
+  let switches
+  message.intent === 'welcome' ? switches = switchData.welcome : message.intent
+  message.intent === 'confirm_keyword' ? switches = switchData.confirm_keyword : message.intent
+  message.intent === 'condition' ? switches = switchData.condition : message.intent
+  message.intent === 'location_pref' ? switches = switchData.location_pref : message.intent
+
   return (
     <div>
-      {message.choose && <Choose message={message} sendMessage={message => sendMessage(message)}/>}
+      {message.choose && <Choose switchData={switches} message={message} sendMessage={message => sendMessage(message)}/>}
       {message.user === 'bot' && !message.choose && (
         <div className="message-data">
           <span className="message-data-time">{message.date}</span>&nbsp; &nbsp;
