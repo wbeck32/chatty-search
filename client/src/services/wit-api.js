@@ -1,8 +1,7 @@
-const superagent = require('superagent');
-const jsonp = require('superagent-jsonp');
+require('dotenv');
+const fetch = require('fetch-jsonp')
+
 const querystring = require('querystring');
-
-
 
 export const buildDate = () => {
   let date = new Date();
@@ -11,41 +10,23 @@ export const buildDate = () => {
 };
 
 export const submitMessage = async message => {
-  // message.choose !== undefined
-  //   ? (message.message.choose = message.choose)
-  //   : message;
-  // message.intent !== undefined
-  //   ? (message.message.intent = message.intent)
-  //   : message;
-  // console.log(1, message)
-  const context = { id: message.intent, doc: message.intent };
+  const context = JSON.stringify({ id: message.intent, doc: message.intent });
   const v = '20170307';
   const verbose = true;
-  const token = 'Bearer ' + process.env.REACT_APP_WIT_TOKEN;
+  const token = process.env.REACT_APP_WIT_CLIENT_TOKEN;
+console.log(process.env)
   const query = querystring.stringify({
     q: message.value,
     verbose: verbose,
     v: v,
-    context: context
-  });
-  const messageResults = await superagent
-    .get('https://api.wit.ai/message')
-    .set('Authorization', token)
-    .query(query)
-    .use(jsonp)
-  console.log(messageResults.body);
-  return messageResults.body;
+    context: context,
+    access_token: token
+    });
+
+    const messageResults = await fetch(`https://api.wit.ai/message?${query}`)
+
+  return messageResults.json();
 }
-
-
-
-
-  // const msgResult = await superagent
-  //   .get('/wit/message')
-  //   .query({ q: message.value, context: context, v: v, verbose: true });
-  // console.log(2, msgResult);
-  // return msgResult;
-
 
 export const handleMessage = async (lastMsg, params) => {
   let msg = '';

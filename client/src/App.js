@@ -38,6 +38,7 @@ class App extends Component {
   }
 
   async sendMessage(q) {
+    console.log(100, q)
     let { displayMessages, params } = this.state;
     if (q.message !== undefined) {
       q.choose !== undefined ? (q.message.choose = q.choose) : q.message.choose;
@@ -50,34 +51,30 @@ class App extends Component {
       params.search_term = q.value;
       this.setState({ params: params });
       this.respondToMessage();
-    } else {
-      if (
-        q.intent !== undefined &&
-        (q.intent === 'search_term' ||
-          Object.keys(q.intent).includes('search_term'))
-      ) {
-        displayMessages.push({
-          value: q.value,
-          intent: 'search_term',
-          user: 'notbot',
-          choose: false,
-          date: buildDate()
-        });
-        this.setState({ displayMessages: displayMessages });
-        this.refineKeywords();
-      } else {
-        // console.log(2299, q);
-        displayMessages.push({
-          value: q.value,
-          intent: q.intent,
-          user: 'notbot',
-          choose: false,
-          date: buildDate()
-        });
-        this.setState({ displayMessages: displayMessages });
-        this.respondToMessage();
-      }
+      // return;
     }
+    if (q.intent === 'search_term') {
+      displayMessages.push({
+        value: q.value,
+        intent: 'search_term',
+        user: 'notbot',
+        choose: false,
+        date: buildDate()
+      });
+      this.setState({ displayMessages: displayMessages });
+      this.refineKeywords();
+      return;
+    }
+    // console.log(2299, q);
+    displayMessages.push({
+      value: q.value,
+      intent: q.intent,
+      user: 'notbot',
+      choose: false,
+      date: buildDate()
+    });
+    this.setState({ displayMessages: displayMessages });
+    this.respondToMessage();
   }
 
   async refineKeywords() {
@@ -85,9 +82,10 @@ class App extends Component {
     const tmp = Array.from(displayMessages);
     const lastMsg = tmp.pop();
     const refinedKeywords = await checkKeywords(lastMsg);
-    if (refinedKeywords.body.ack === 'Success') {
+    console.log(333, refinedKeywords)
+    if (refinedKeywords.ack === 'Success') {
       displayMessages.push({
-        value: refinedKeywords.body.keywords,
+        value: refinedKeywords.keywords,
         intent: 'confirm_keyword',
         user: 'bot',
         choose: true,
@@ -123,12 +121,12 @@ class App extends Component {
     const { displayMessages, params } = this.state;
     const tmp = Array.from(displayMessages);
     const lastMsg = tmp.pop();
-    const wittedMsg = await submitMessage(lastMsg)
-    console.log(88, wittedMsg)
+    const wittedMsg = await submitMessage(lastMsg);
+    console.log(88, wittedMsg);
     const msgResponse = await handleMessage(wittedMsg, params);
-    console.log(89, msgResponse)
-    displayMessages.push(msgResponse)
-    this.setState({displayMessages: displayMessages})
+    console.log(89, msgResponse);
+    displayMessages.push(msgResponse);
+    this.setState({ displayMessages: displayMessages });
     // console.log(33, msgResponse);
     // if (resp.body.ack && resp.body.ack === 'Warning') {
     //no suggested keywords

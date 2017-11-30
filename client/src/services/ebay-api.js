@@ -1,9 +1,9 @@
 require('dotenv');
 const superagent = require('superagent');
+const jsonp = require('jsonp-promise');
 const querystring = require('querystring');
 
 export const checkKeywords = async message => {
-console.log(process.env)
   const refine = querystring.stringify({
     'OPERATION-NAME': 'getSearchKeywordsRecommendation',
     'SERVICE-VERSION': '1.0.0',
@@ -12,14 +12,14 @@ console.log(process.env)
     'SECURITY-APPNAME': process.env.REACT_APP_SECURITY_APPNAME,
     'GLOBAL-ID': 'EBAY-US'
   });
-  const refinedKeywords = await superagent
-    .get('https://svcs.ebay.com/services/search/FindingService/v1')
-    .query(refine);
-  const keywordsToReturn = JSON.parse(refinedKeywords.text);
+
+  const refinedKeywords = await jsonp(
+    `https://svcs.ebay.com/services/search/FindingService/v1?${refine}`
+  ).promise;
   const {
     ack,
     keywords
-  } = keywordsToReturn.getSearchKeywordsRecommendationResponse[0];
+  } = refinedKeywords.getSearchKeywordsRecommendationResponse[0];
   const refined = { ack: ack[0], keywords: keywords[0] };
   return refined;
 };
@@ -33,9 +33,10 @@ export const callFindingAPI = async keywords => {
     'SECURITY-APPNAME': process.env.REACT_APP_SECURITY_APPNAME,
     'GLOBAL-ID': 'EBAY-US'
   });
-  const searchResults = await superagent
-    .get('https://svcs.ebay.com/services/search/FindingService/v1')
-    .query(findItems);
-  const results = JSON.parse(searchResults.text);
-  return results.findItemsByKeywordsResponse[0].searchResult;
+  const searchResults = await jsonp(
+    `https://svcs.ebay.com/services/search/FindingService/v1?${findItems}`
+  ).promise;
+  console.log(88, searchResults);
+  // const results = JSON.parse(searchResults.text);
+  // return results.findItemsByKeywordsResponse[0].searchResult;
 };

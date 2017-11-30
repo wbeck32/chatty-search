@@ -6,9 +6,6 @@ import React from 'react';
 // };
 
 export default function Send({ lastMsg, sendMessage }) {
-  // console.log(11001100, lastMsg)
-
-
   return (
     <div className="chat-message clearfix">
       <form

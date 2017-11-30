@@ -26,6 +26,7 @@ console.log(21, displayMessages)
 // };
 
 export function Message({ message, sendMessage }) {
+          // <span className="hidden-intent">{message.intent}</span>
 
   console.log(1, message.value, 2, message.user, 3, message.date, 4, message.intent, 5, message.choose);
   return (
@@ -35,7 +36,6 @@ export function Message({ message, sendMessage }) {
         <div className="message-data">
           <span className="message-data-time">{message.date}</span>&nbsp; &nbsp;
           <span className="message-data-name">{message.user}</span>
-          <span className="hidden-intent">{message.intent}</span>
           <i className="fa fa-circle me" />
           <div className="message my-message">{message.value}</div>
         </div>
