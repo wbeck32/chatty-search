@@ -10,21 +10,29 @@ export const submitMessage = async message => {
   return msgResult;
 };
 
-export const handleMessage = async displayMessages => {
-  const tmp = Array.from(displayMessages);
-  const currVal = tmp.pop();
-  const intent = currVal.intent;
+export const handleMessage = async lastMsg => {
+
   let msg = '';
-  console.log(2, currVal)
-  if (!intent) {
+  console.log(223, lastMsg)
+
+  if (!lastMsg.intent) {
     console.log('🤖  Try something else. I got no intent :)');
     msg = 'no results';
     return msg;
   }
-
-  switch (intent) {
+  switch (lastMsg.intent) {
+    case 'greetings':
+    msg = {
+      value: 'my intent is greetings'
+    }
+    return msg;
+    case 'confirm_keyword':
+      msg = {
+        value: 'my intent is confirm_keyword'
+      }
+      return msg;
     case 'search_term':
-      params.search_term = currVal.value;
+      params.search_term = lastMsg.value;
 
       msg = {
         value: 'Great! Do you want a new or used ' + params.search_term + '?',
@@ -32,7 +40,7 @@ export const handleMessage = async displayMessages => {
       };
       return msg;
     case 'condition':
-      params.condition = currVal.value;
+      params.condition = lastMsg.value;
       msg = {
         value:
           "Excellent! Let's find you a " +
@@ -44,7 +52,7 @@ export const handleMessage = async displayMessages => {
       };
       return msg;
     case 'budget':
-      params.budget = currVal.value;
+      params.budget = lastMsg.value;
       msg = {
         value: 'So you have a budget of ' + params.budget + '.  Do you want a ' +
         params.search_term +
@@ -53,7 +61,7 @@ export const handleMessage = async displayMessages => {
       };
       return msg;
     case 'location_pref':
-      params.location_pref = currVal.value;
+      params.location_pref = lastMsg.value;
       msg = {
         value:
           'So you want to find something ' +
@@ -63,7 +71,7 @@ export const handleMessage = async displayMessages => {
       };
       return msg;
     case 'zip_code':
-      params.zip_code = currVal.value;
+      params.zip_code = lastMsg.value;
       msg = {
         value:
           'Thanks for your ZIP code. Just give me a few moments to search.',
@@ -71,7 +79,7 @@ export const handleMessage = async displayMessages => {
       };
       return msg;
     default:
-      console.log(`🤖  ${intent}`);
+      console.log(`🤖  ${lastMsg.intent}`);
       break;
   }
 };

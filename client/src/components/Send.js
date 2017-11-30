@@ -1,9 +1,9 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 
-Send.PropTypes = {
-  sendMessage: PropTypes.func
-};
+// Send.PropTypes = {
+//   sendMessage: PropTypes.func
+// };
 
 export default function Send({ sendMessage }) {
   return (

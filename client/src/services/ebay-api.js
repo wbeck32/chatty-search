@@ -1,8 +1,11 @@
 require('dotenv')
 const superagent = require('superagent');
 
-export const checkKeywords = async data => {
-  const refinedKeywords = await superagent.get('/ebay/refineKeywords').query({data});
+export const checkKeywords = async message => {
+  console.log(989, message)
+
+  const refinedKeywords = await superagent.get('/ebay/refineKeywords').query(message);
+  message
   console.log(989, refinedKeywords)
   return refinedKeywords;
 };

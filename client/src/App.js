@@ -18,7 +18,8 @@ class App extends Component {
           value: 'Hello! What would you like to search for today?',
           intent: 'greetings',
           user: 'bot',
-          choose: false
+          choose: false,
+          date: this.buildDate()
         }
       ],
       results: [],
@@ -33,47 +34,72 @@ class App extends Component {
     };
   }
 
+  buildDate() {
+    let date = new Date();
+    date = date.toLocaleString();
+    return date;
+  }
+
   async sendMessage(q) {
+    q.choose !== undefined ? q.message.choose = q.choose : q
+    q.intent !== undefined ? q.message.intent = q.intent : q
+
     let { displayMessages } = this.state;
     const submittedMessage = await submitMessage(q);
     const { entities, _text } = submittedMessage.body;
-    displayMessages.push({
-      value: _text,
-      intent: '',
-      user: '',
-      choose: false
-    });
     if (Object.keys(entities).includes('search_term')) {
-      this.refineKeywords(entities, _text);
-    } else {
-      this.respondToMessage(entities, _text);
-    }
-  }
-
-  async refineKeywords(entities, _text) {
-    const { displayMessages } = this.state;
-    const refinedKeywords = await checkKeywords(_text);
-    if (refinedKeywords.body.ack === 'Success') {
       displayMessages.push({
-        value: 'Did you mean ' + refinedKeywords.body.keywords + '?',
-        intent: '',
-        user: 'bot',
-        choose: true
+        value: _text,
+        intent: 'search_term',
+        user: 'notbot',
+        choose: false,
+        date: this.buildDate()
       });
       this.setState({ displayMessages: displayMessages });
-      //display yes/no buttons
-      return;
+      this.refineKeywords();
     } else {
-      this.respondToMessage(entities, _text);
-      return;
+      console.log(2299, Object.keys(entities));
+      displayMessages.push({
+        value: _text,
+        intent: entities,
+        user: 'notbot',
+        choose: false,
+        date: this.buildDate()
+      });
+      this.setState({ displayMessages: displayMessages });
+      this.respondToMessage();
     }
   }
 
-  async respondToMessage(entities, _text) {
-    console.log(100, entities);
+  async refineKeywords() {
+    const { displayMessages } = this.state;
+    const tmp = Array.from(displayMessages);
+    const lastMsg = tmp.pop();
+    const refinedKeywords = await checkKeywords(lastMsg);
+    if (refinedKeywords.body.ack === 'Success') {
+      displayMessages.push({
+        value: refinedKeywords.body.keywords,
+        intent: 'confirm_keyword',
+        user: 'bot',
+        choose: true,
+        date: this.buildDate()
+      });
+      this.setState({ displayMessages: displayMessages });
+      this.respondToMessage();
+      return
+  }
+}
+
+  async respondToMessage() {
     const { displayMessages, response } = this.state;
-    const resp = await handleMessage(displayMessages);
-    console.log(99, resp);
+    const tmp = Array.from(displayMessages);
+    const lastMsg = tmp.pop();
+    const resp = await handleMessage(lastMsg);
+    console.log(33, resp);
+    // if (resp.body.ack && resp.body.ack === 'Warning') {
+    //no suggested keywords
+
+    // }
     // displayMessages.push(resp);
     // this.setState({
     //   response: resp.value,
@@ -87,12 +113,15 @@ class App extends Component {
   }
 
   render() {
-    const { displayMessages, results, response, choose } = this.state;
+    const { displayMessages, results } = this.state;
 
     return (
       <div className="App">
         <div className="chat" id="chatty-search">
-          <Portal displayMessages={displayMessages} />
+          <Portal
+            displayMessages={displayMessages}
+            sendMessage={message => this.sendMessage(message)}
+          />
           <Send sendMessage={q => this.sendMessage(q)} />
         </div>
 

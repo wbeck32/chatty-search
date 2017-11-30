@@ -1,9 +1,9 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 
-Results.PropTypes = {
-  results: PropTypes.array
-};
+// Results.PropTypes = {
+//   results: PropTypes.array
+// };
 
 // {itemId, title, globalId, subtitle, primaryCategory, secondaryCategory, galleryURL, viewItemURL, paymentMethod, autoPay, postalCode, location, country, shippingInfo, sellingStatus, listingInfo, returnsAccepted, condition, isMultiVariationListing, topRatedListing}
 
@@ -19,9 +19,9 @@ export default function Results({ results }) {
   );
 }
 
-Result.PropTypes = {
-  result: PropTypes.object
-};
+// Result.PropTypes = {
+//   result: PropTypes.object
+// };
 
 export function Result({ result }) {
   return (

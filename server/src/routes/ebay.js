@@ -8,11 +8,12 @@ const { asyncIt } = require('./middleware');
 router.get(
   '/refineKeywords',
   asyncIt(async (req, res, next) => {
+    const {value} = req.query;
     const refine = querystring.stringify({
       'OPERATION-NAME': 'getSearchKeywordsRecommendation',
       'SERVICE-VERSION': '1.0.0',
       'RESPONSE-DATA-FORMAT': 'JSON',
-      keywords: req.query.data,
+      keywords: value,
       'SECURITY-APPNAME': process.env.REACT_APP_SECURITY_APPNAME,
       'GLOBAL-ID': 'EBAY-US'
     });
