@@ -104,7 +104,7 @@ class App extends Component {
     // console.log(1000, q)
     const pleaseHold = {
       value: 'Please wait a few moments while I find some items for you.',
-      intent: 'search_term',
+      intent: 'search',
       user: 'notbot',
       choose: false,
       date: buildDate()
