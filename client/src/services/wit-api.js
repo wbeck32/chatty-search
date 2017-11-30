@@ -1,6 +1,5 @@
 require('dotenv');
-const fetch = require('fetch-jsonp')
-
+const fetch = require('fetch-jsonp');
 const querystring = require('querystring');
 
 export const buildDate = () => {
@@ -14,23 +13,32 @@ export const submitMessage = async message => {
   const v = '20170307';
   const verbose = true;
   const token = process.env.REACT_APP_WIT_CLIENT_TOKEN;
-console.log(process.env)
   const query = querystring.stringify({
     q: message.value,
     verbose: verbose,
     v: v,
     context: context,
     access_token: token
-    });
+  });
 
-    const messageResults = await fetch(`https://api.wit.ai/message?${query}`)
-
-  return messageResults.json();
-}
+  let messageResults = await fetch(`https://api.wit.ai/message?${query}`);
+  messageResults = Promise.resolve(messageResults.json()).then(res => {
+    const intent = Object.keys(res.entities)[0];
+    const results = {
+      value: res._text,
+      intent: intent === 'search_term' ? 'search_term_confirmed' : intent,
+      user: 'bot',
+      choose: false,
+      date: buildDate()
+    };
+    return results;
+  });
+  return messageResults;
+};
 
 export const handleMessage = async (lastMsg, params) => {
   let msg = '';
-  // console.log(223, lastMsg, params);
+  console.log(223, lastMsg, params);
 
   if (!lastMsg.intent) {
     console.log('🤖  Try something else. I got no intent :)');
@@ -39,21 +47,15 @@ export const handleMessage = async (lastMsg, params) => {
   }
   switch (lastMsg.intent) {
     case 'confirm_keyword':
-      msg = lastMsg;
+      msg = { message: lastMsg, params: params };
       return msg;
     case 'search_term_confirmed':
-      msg = lastMsg.message;
-      return msg;
-    case 'search_term':
-      msg = {
-        value: 'Great! Do you want a new or used ' + params.search_term + '?',
-        intent: 'condition',
-        user: 'bot',
-        choose: true,
-        date: buildDate(),
-        params: params
-      };
-      return msg;
+      msg = lastMsg;
+      lastMsg.intent = 'condition';
+      lastMsg.value =
+        'Great! Do you want a new or used ' + params.search_term + '?';
+      lastMsg.choose = true;
+      return { message: lastMsg, params: params };
     case 'condition':
       params.condition = lastMsg.value;
       msg = {
@@ -65,7 +67,7 @@ export const handleMessage = async (lastMsg, params) => {
           ' How much do you want to spend?',
         intent: 'budget',
         user: 'bot',
-        choose: true,
+        choose: false,
         date: buildDate(),
         params: params
       };

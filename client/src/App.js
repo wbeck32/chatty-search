@@ -22,7 +22,6 @@ class App extends Component {
           intent: 'search_term',
           user: 'bot',
           choose: false,
-          entities: 'entities',
           date: buildDate()
         }
       ],
@@ -51,7 +50,7 @@ class App extends Component {
       params.search_term = q.value;
       this.setState({ params: params });
       this.respondToMessage();
-      // return;
+      return;
     }
     if (q.intent === 'search_term') {
       displayMessages.push({
@@ -65,7 +64,7 @@ class App extends Component {
       this.refineKeywords();
       return;
     }
-    // console.log(2299, q);
+    console.log(2299, q);
     displayMessages.push({
       value: q.value,
       intent: q.intent,
@@ -82,7 +81,7 @@ class App extends Component {
     const tmp = Array.from(displayMessages);
     const lastMsg = tmp.pop();
     const refinedKeywords = await checkKeywords(lastMsg);
-    console.log(333, refinedKeywords)
+    // console.log(333, refinedKeywords)
     if (refinedKeywords.ack === 'Success') {
       displayMessages.push({
         value: refinedKeywords.keywords,
@@ -93,10 +92,10 @@ class App extends Component {
       });
       this.setState({ displayMessages: displayMessages });
       this.respondToMessage();
-      // return;
     } else {
       params.search_term = lastMsg.value;
-      this.setState({ params: params });
+      console.log(4536, displayMessages)
+      this.setState({ params : params });
       this.respondToMessage();
     }
   }
@@ -121,22 +120,13 @@ class App extends Component {
     const { displayMessages, params } = this.state;
     const tmp = Array.from(displayMessages);
     const lastMsg = tmp.pop();
+    console.log(87, lastMsg)
     const wittedMsg = await submitMessage(lastMsg);
     console.log(88, wittedMsg);
-    const msgResponse = await handleMessage(wittedMsg, params);
+    let msgResponse = await handleMessage(wittedMsg, params);
     console.log(89, msgResponse);
-    displayMessages.push(msgResponse);
-    this.setState({ displayMessages: displayMessages });
-    // console.log(33, msgResponse);
-    // if (resp.body.ack && resp.body.ack === 'Warning') {
-    //no suggested keywords
-
-    // }
-    // displayMessages.push(resp);
-    // this.setState({
-    //   response: resp.value,
-    //   displayMessages: displayMessages
-    // });
+    displayMessages.push(msgResponse.message);
+    this.setState({ displayMessages: displayMessages, params: msgResponse.params });
   }
 
   render() {

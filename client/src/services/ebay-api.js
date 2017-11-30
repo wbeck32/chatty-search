@@ -1,5 +1,4 @@
 require('dotenv');
-const superagent = require('superagent');
 const jsonp = require('jsonp-promise');
 const querystring = require('querystring');
 

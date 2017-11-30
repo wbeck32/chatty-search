@@ -7,7 +7,7 @@ import Choose from './Choose';
 // };
 
 export default function Messages({ displayMessages, sendMessage}) {
-console.log(21, displayMessages)
+  console.log(1, displayMessages)
   return (
     <div className="chat-history">
       <ul>
@@ -26,9 +26,8 @@ console.log(21, displayMessages)
 // };
 
 export function Message({ message, sendMessage }) {
-          // <span className="hidden-intent">{message.intent}</span>
 
-  console.log(1, message.value, 2, message.user, 3, message.date, 4, message.intent, 5, message.choose);
+  console.log(2, message);
   return (
     <div>
       {message.choose && <Choose message={message} sendMessage={message => sendMessage(message)}/>}
