@@ -11,7 +11,7 @@ const Button = styled.button`
 
 
 export default function Choose({ message, sendMessage, switchData }) {
-  console.log(1212, switchData)
+  // console.log(1212, switchData)
   return (
     <div className="message-data">
       <span className="message-data-time">{message.date}</span>&nbsp; &nbsp;

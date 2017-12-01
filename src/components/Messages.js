@@ -2,7 +2,7 @@ import React from 'react';
 import Choose from './Choose';
 
 export default function Messages({ displayMessages, sendMessage, switchData}) {
-  console.log(1, displayMessages)
+  // console.log(1, displayMessages)
   return (
     <div className="chat-history">
       <ul>
@@ -17,7 +17,7 @@ export default function Messages({ displayMessages, sendMessage, switchData}) {
 }
 
 export function Message({ message, sendMessage, switchData }) {
-  console.log(2, message);
+  // console.log(2, message);
   let switches
   message.intent === 'welcome' ? switches = switchData.welcome : message.intent
   message.intent === 'confirm_keyword' ? switches = switchData.confirm_keyword : message.intent

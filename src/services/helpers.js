@@ -4,6 +4,17 @@ export const buildDate = () => {
   return date;
 };
 
+export const pushNoDupes = (displayMessages, currentMessage) => {
+  const storedMsgs = Object.values(displayMessages);
+  storedMsgs.forEach(msg => {
+    if (msg.date !== currentMessage.date) {
+      storedMsgs.push(currentMessage);
+    }
+    return storedMsgs;
+  });
+  return storedMsgs;
+};
+
 export const switches = {
   welcome: {
     tText: 'Yep! Lets go!',

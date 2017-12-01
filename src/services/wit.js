@@ -15,22 +15,12 @@ export const submitMessage = async message => {
     context: context,
     access_token: token
   });
-  console.log(85, message);
   let messageResults = await fetch(`https://api.wit.ai/message?${query}`);
-  messageResults = Promise.resolve(messageResults.json()).then(res => {
-    const intent = Object.keys(res.entities)[0];
-    const results = {
-      value: res._text,
-      intent: intent === 'search_term' ? 'search_term_confirmed' : intent,
-      user: 'bot',
-      choose: false,
-      date: buildDate()
-    };
-    return results;
-  });
-  console.log(86, messageResults);
-  return messageResults;
+  messageResults = Promise.resolve(messageResults.json()).then(res => {return res});  return messageResults;
 };
+
+
+
 
 export const handleMessage = async (lastMsg, params) => {
   let msg = '';
@@ -42,17 +32,17 @@ export const handleMessage = async (lastMsg, params) => {
     return msg;
   }
   switch (lastMsg.intent) {
-    case 'greeting': console.log(100)
+    case 'welcome': console.log(100)
       msg = {
         value:
           "Excellent! I'm going to need to ask you a few questions.\n\nFirst, please enter a few keywords describing what you want.",
-        intent: 'search_term',
+        intent: 'confirm_keyword',
         user: 'bot',
         choose: false,
         date: buildDate()
       };
-      return (msg, params);
-      case 'welcome': console.log(101)
+      return ({message: msg, params: params});
+      case 'greeting': console.log(101)
       msg = {
         value: lastMsg.value,
         intent: 'greeting',
@@ -60,20 +50,21 @@ export const handleMessage = async (lastMsg, params) => {
         choose: false,
         date: buildDate()
       };
-      return (msg, params);
+      return ({message: msg, params: params});
       case 'confirm_keyword': console.log(102)
       msg = {
         message: {
-          value: 'Go ahead...',
-          intent: 'search_term',
+          value: 'OK, try again.',
+          intent: 'confirm_keyword',
           user: 'bot',
-          choose: false,
+          choose: true,
           date: buildDate()
         }
       };
-      return (msg, params);
+      return ({message: msg, params: params});
       case 'search_term_confirmed': console.log(103)
-      params.search_term = lastMsg.value;
+      params.search_term = params.search_term;
+      console.log(98, params, lastMsg)
       msg = {
         message: {
           value: 'Do you want a new or a used '+params.search_term+'?',
@@ -83,7 +74,7 @@ export const handleMessage = async (lastMsg, params) => {
           date: buildDate()
         }
       };
-      return (msg, params);
+      return ({message: msg, params: params});
       case 'condition': console.log(104)
       params.condition = lastMsg.value;
       msg = {
@@ -98,7 +89,7 @@ export const handleMessage = async (lastMsg, params) => {
         choose: false,
         date: buildDate()
       };
-      return (msg, params);
+      return ({message: msg, params: params});
       case 'budget': console.log(105)
       params.budget = lastMsg.value;
       msg = {
@@ -113,7 +104,7 @@ export const handleMessage = async (lastMsg, params) => {
         choose: true,
         date: buildDate()
       };
-      return (msg, params);
+      return ({message: msg, params: params});
       case 'location_pref': console.log(106)
       params.location_pref = lastMsg.value;
       msg = {
@@ -126,7 +117,7 @@ export const handleMessage = async (lastMsg, params) => {
         choose: false,
         date: buildDate()
       };
-      return (msg, params);
+      return ({message: msg, params: params});
       case 'zip_code': console.log(107)
       params.zip_code = lastMsg.value;
       msg = {
@@ -137,7 +128,7 @@ export const handleMessage = async (lastMsg, params) => {
         choose: false,
         date: buildDate()
       };
-      return (msg, params);
+      return ({message: msg, params: params});
       case 'display_results': console.log(108)
       // params.zip_code = lastMsg.value;
       msg = {
@@ -147,7 +138,7 @@ export const handleMessage = async (lastMsg, params) => {
         choose: false,
         date: buildDate()
       };
-      return (msg, params);
+      return ({message: msg, params: params});
       default: console.log(109)
       msg = {
         value: "Sorry, I didn't catch that.",
@@ -156,6 +147,6 @@ export const handleMessage = async (lastMsg, params) => {
         choose: true,
         date: buildDate()
       };
-      return (msg, params);
+      return ({message: msg, params: params});
     }
 };
