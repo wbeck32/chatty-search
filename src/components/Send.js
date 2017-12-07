@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function Send({ lastMsg, sendMessage }) {
+export default function Send({ lastMsg, witMessage }) {
   return (
     <div className="chat-message clearfix">
       <form
@@ -9,7 +9,7 @@ export default function Send({ lastMsg, sendMessage }) {
           event.preventDefault();
           const form = event.target;
           const { query } = form.elements;
-          sendMessage({ value: query.value, intent: lastMsg.intent });
+          witMessage({ value: query.value, intent: lastMsg.intent });
           form.reset();
         }}>
         <textarea

@@ -1,18 +1,40 @@
+import { handleMessage } from '../services/wit';
 export const buildDate = () => {
   let date = new Date();
-  date = date.toLocaleString();
+  date.unixTime = date.valueOf();
+  date.string = date.toLocaleString();
   return date;
 };
 
+export const getIntent = message => {
+  console.log(78787, message)
+  const intent = Object.keys(message.entities);
+  console.log(8989, intent)
+  return intent;
+};
+
 export const pushNoDupes = (displayMessages, currentMessage) => {
-  const storedMsgs = Object.values(displayMessages);
-  storedMsgs.forEach(msg => {
-    if (msg.date !== currentMessage.date) {
-      storedMsgs.push(currentMessage);
+  console.log(3, displayMessages, currentMessage);
+  // const storedMsgs = Object.values(displayMessages);
+  const tmp = Array.from(displayMessages);
+  const lastMsg = tmp.pop();
+  currentMessage.message
+    ? (currentMessage = currentMessage.message)
+    : currentMessage;
+  // console.log(13, lastMsg.date.unixTime);
+  // console.log(14, currentMessage.date.unixTime);
+
+  if (lastMsg.date.unixTime && currentMessage.date.unixTime) {
+    if (
+      currentMessage.date.unixTime - lastMsg.date.unixTime <= 10000 &&
+      currentMessage.value !== lastMsg.value
+    ) {
+      displayMessages.push(currentMessage);
+      // console.log(13, displayMessages);
     }
-    return storedMsgs;
-  });
-  return storedMsgs;
+  }
+  console.log(4, displayMessages);
+  return displayMessages;
 };
 
 export const switches = {

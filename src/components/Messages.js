@@ -29,7 +29,7 @@ export function Message({ message, sendMessage, switchData }) {
       {message.choose && <Choose switchData={switches} message={message} sendMessage={message => sendMessage(message)}/>}
       {message.user === 'bot' && !message.choose && (
         <div className="message-data">
-          <span className="message-data-time">{message.date}</span>&nbsp; &nbsp;
+          <span className="message-data-time">{message.date.string}</span>&nbsp; &nbsp;
           <span className="message-data-name">{message.user}</span>
           <i className="fa fa-circle me" />
           <div className="message my-message">{message.value}</div>
@@ -37,7 +37,7 @@ export function Message({ message, sendMessage, switchData }) {
       )}
       {message.user !== 'bot' && (
         <div className="message-data align-right">
-          <span className="message-data-time">{message.date}</span>&nbsp;
+          <span className="message-data-time">{message.date.string}</span>&nbsp;
           &nbsp;
           <span className="message-data-name">{message.user}</span>
           <i className="fa fa-circle me" />

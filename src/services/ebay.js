@@ -3,11 +3,12 @@ const jsonp = require('jsonp-promise');
 const querystring = require('querystring');
 
 export const checkKeywords = async message => {
+  console.log(3, message)
   const refine = querystring.stringify({
     'OPERATION-NAME': 'getSearchKeywordsRecommendation',
     'SERVICE-VERSION': '1.0.0',
     'RESPONSE-DATA-FORMAT': 'JSON',
-    keywords: message.value,
+    keywords: message,
     'SECURITY-APPNAME': process.env.REACT_APP_SECURITY_APPNAME,
     'GLOBAL-ID': 'EBAY-US'
   });
@@ -15,10 +16,9 @@ export const checkKeywords = async message => {
   const refinedKeywords = await jsonp(
     `https://svcs.ebay.com/services/search/FindingService/v1?${refine}`
   ).promise;
-  const {
-    ack,
-    keywords
-  } = refinedKeywords.getSearchKeywordsRecommendationResponse[0];
+  // console.log(4, refinedKeywords)
+
+  const { ack, keywords } = refinedKeywords.getSearchKeywordsRecommendationResponse[0];
   const refined = { ack: ack[0], keywords: keywords[0] };
   return refined;
 };
